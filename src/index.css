@@ -1,0 +1,380 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: oklch(0.985 0 0);
+  --color-foreground: oklch(0.145 0 0);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.145 0 0);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.145 0 0);
+  --color-primary: oklch(0.546 0.245 262.881);
+  --color-primary-foreground: oklch(0.985 0 0);
+  --color-secondary: oklch(0.96 0.005 286);
+  --color-secondary-foreground: oklch(0.2 0 0);
+  --color-muted: oklch(0.96 0.005 286);
+  --color-muted-foreground: oklch(0.556 0.02 286);
+  --color-accent: oklch(0.96 0.005 286);
+  --color-accent-foreground: oklch(0.2 0 0);
+  --color-destructive: oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(0.985 0 0);
+  --color-border: oklch(0.902 0.005 286);
+  --color-input: oklch(0.902 0.005 286);
+  --color-ring: oklch(0.546 0.245 262.881);
+  --color-chart-1: oklch(0.646 0.222 41.116);
+  --color-chart-2: oklch(0.6 0.118 184.704);
+  --color-chart-3: oklch(0.398 0.07 227.392);
+  --color-chart-4: oklch(0.828 0.189 84.429);
+  --color-chart-5: oklch(0.769 0.188 70.067);
+  --color-sidebar: oklch(0.985 0 0);
+  --color-sidebar-foreground: oklch(0.145 0 0);
+  --color-sidebar-primary: oklch(0.546 0.245 262.881);
+  --color-sidebar-primary-foreground: oklch(0.985 0 0);
+  --color-sidebar-accent: oklch(0.96 0.005 286);
+  --color-sidebar-accent-foreground: oklch(0.2 0 0);
+  --color-sidebar-border: oklch(0.902 0.005 286);
+  --color-sidebar-ring: oklch(0.546 0.245 262.881);
+  --radius: 0.625rem;
+  --radius-xs: calc(var(--radius) * 0.5);
+  --radius-sm: calc(var(--radius) * 0.75);
+  --radius-md: calc(var(--radius) * 0.875);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+.dark {
+  --color-background: oklch(0.145 0 0);
+  --color-foreground: oklch(0.985 0 0);
+  --color-card: oklch(0.205 0 0);
+  --color-card-foreground: oklch(0.985 0 0);
+  --color-popover: oklch(0.205 0 0);
+  --color-popover-foreground: oklch(0.985 0 0);
+  --color-primary: oklch(0.546 0.245 262.881);
+  --color-primary-foreground: oklch(0.985 0 0);
+  --color-secondary: oklch(0.269 0 0);
+  --color-secondary-foreground: oklch(0.985 0 0);
+  --color-muted: oklch(0.269 0 0);
+  --color-muted-foreground: oklch(0.708 0 0);
+  --color-accent: oklch(0.269 0 0);
+  --color-accent-foreground: oklch(0.985 0 0);
+  --color-destructive: oklch(0.396 0.141 25.723);
+  --color-destructive-foreground: oklch(0.985 0 0);
+  --color-border: oklch(0.269 0 0);
+  --color-input: oklch(0.269 0 0);
+  --color-ring: oklch(0.546 0.245 262.881);
+  --color-chart-1: oklch(0.488 0.243 264.376);
+  --color-chart-2: oklch(0.696 0.17 162.48);
+  --color-chart-3: oklch(0.769 0.188 70.067);
+  --color-chart-4: oklch(0.627 0.265 303.9);
+  --color-chart-5: oklch(0.645 0.246 16.439);
+  --color-sidebar: oklch(0.145 0 0);
+  --color-sidebar-foreground: oklch(0.985 0 0);
+  --color-sidebar-primary: oklch(0.546 0.245 262.881);
+  --color-sidebar-primary-foreground: oklch(0.985 0 0);
+  --color-sidebar-accent: oklch(0.269 0 0);
+  --color-sidebar-accent-foreground: oklch(0.985 0 0);
+  --color-sidebar-border: oklch(0.269 0 0);
+  --color-sidebar-ring: oklch(0.546 0.245 262.881);
+}
+
+/* =====================================================
+   BEAUTYBOOK THEME — Luxury beauty · Soft pink + lavender
+   Palette: #EC4899 primary, #F9A8D4 secondary, #8B5CF6 accent
+   Typography: Plus Jakarta Sans headings + DM Sans body
+   ===================================================== */
+
+[data-theme="beautybook"] {
+  --color-primary: #EC4899;
+  --color-ring: #EC4899;
+  --color-background: #FDF2F8;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #831843;
+  --color-foreground: #831843;
+  --color-border: #FBCFE8;
+  --color-muted: #F1EEF5;
+  --color-muted-foreground: #6B4466;
+  --color-accent: #F5E6F0;
+  --color-accent-foreground: #831843;
+  --color-secondary: #F9A8D4;
+  --color-secondary-foreground: #831843;
+  --color-input: #FBCFE8;
+  --demo-gradient: linear-gradient(135deg, #FDF2F8 0%, #FAE8F4 50%, #F3E8FF 100%);
+  --demo-sidebar-bg: linear-gradient(180deg, #FDF2F8 0%, #F5E6F0 100%);
+  --demo-kpi-hero: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+  --beauty-accent: #8B5CF6;
+  --beauty-secondary: #F9A8D4;
+  --beauty-warm: #F472B6;
+  --beauty-glow: rgba(236, 72, 153, 0.12);
+}
+
+[data-theme="beautybook"].dark,
+.dark [data-theme="beautybook"] {
+  --color-background: #1A0A14;
+  --color-card: #261020;
+  --color-card-foreground: #FDF2F8;
+  --color-foreground: #FDF2F8;
+  --color-border: #3D1A30;
+  --color-muted: #2D1525;
+  --color-muted-foreground: #E8C8DC;
+  --color-primary: #F472B6;
+  --color-primary-foreground: #FDF2F8;
+  --color-ring: #F472B6;
+  --color-input: #3D1A30;
+  --color-accent: #2D1525;
+  --color-accent-foreground: #FDF2F8;
+  --color-secondary: #3D1A30;
+  --color-secondary-foreground: #FDF2F8;
+  --color-popover: #261020;
+  --color-popover-foreground: #FDF2F8;
+  --color-destructive: #F87171;
+  --color-destructive-foreground: #FDF2F8;
+  --demo-sidebar-bg: linear-gradient(180deg, #1A0A14 0%, #261020 100%);
+  --demo-gradient: linear-gradient(135deg, #1A0A14 0%, #261020 50%, #1E1030 100%);
+  --beauty-accent: #A78BFA;
+  --beauty-secondary: #F9A8D4;
+  --beauty-glow: rgba(244, 114, 182, 0.15);
+}
+
+/* =====================================================
+   PRECISION STYLING — Luxury beauty identity
+   ===================================================== */
+
+/* Improved shadows — Soft UI Evolution style */
+[data-theme] {
+  --shadow-card: 0 1px 3px rgba(131, 24, 67, 0.06), 0 1px 2px rgba(131, 24, 67, 0.04);
+  --shadow-card-hover: 0 8px 25px -5px rgba(236, 72, 153, 0.12), 0 4px 10px -4px rgba(139, 92, 246, 0.08);
+  --shadow-card-lg: 0 16px 40px -8px rgba(236, 72, 153, 0.15), 0 8px 16px -6px rgba(139, 92, 246, 0.06);
+  --shadow-glow: 0 0 20px rgba(236, 72, 153, 0.15);
+}
+
+.dark [data-theme] {
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-card-hover: 0 8px 25px -5px rgba(244, 114, 182, 0.2), 0 4px 10px -4px rgba(167, 139, 250, 0.12);
+  --shadow-card-lg: 0 16px 40px -8px rgba(244, 114, 182, 0.2);
+  --shadow-glow: 0 0 25px rgba(244, 114, 182, 0.2);
+}
+
+/* Page header — Playfair Display serif for luxury feel */
+[data-theme] .demo-page-header {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* KPI label styling — refined uppercase tracking */
+[data-theme] .kpi-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+/* KPI value styling — bold numbers */
+[data-theme] .kpi-value {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+}
+
+/* KPI icon — rounded with glow */
+[data-theme] .kpi-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+/* Card hover — refined lift with pink glow */
+[data-theme] .card-hover {
+  transition: box-shadow 0.25s ease-out, transform 0.2s ease-out;
+  box-shadow: var(--shadow-card);
+}
+[data-theme] .card-hover:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* Sidebar nav — luxury styling */
+[data-theme] .nav-item-precise {
+  min-height: 44px;
+  padding: 10px 14px;
+  transition: all 0.2s ease-out;
+  border-radius: 12px;
+}
+
+/* Sidebar logo */
+[data-theme] .sidebar-logo {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* Chart card title */
+[data-theme] .chart-title {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Heading font utility */
+.heading-font {
+  font-family: var(--font-heading);
+}
+
+/* =====================================================
+   ANIMATIONS — Refined micro-interactions
+   ===================================================== */
+
+/* Stagger animation for cards — improved easing */
+@keyframes stagger-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.stagger-item {
+  animation: stagger-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 50ms; }
+.stagger-item:nth-child(3) { animation-delay: 100ms; }
+.stagger-item:nth-child(4) { animation-delay: 150ms; }
+.stagger-item:nth-child(5) { animation-delay: 200ms; }
+.stagger-item:nth-child(6) { animation-delay: 250ms; }
+.stagger-item:nth-child(7) { animation-delay: 300ms; }
+.stagger-item:nth-child(8) { animation-delay: 350ms; }
+
+/* Page transitions — smooth fade up */
+.page-enter {
+  animation: page-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtle glow pulse for important elements */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(236, 72, 153, 0); }
+  50% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.15); }
+}
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Scale feedback on tap — per UX guidelines */
+[data-theme] button:active:not(:disabled),
+[data-theme] [role="button"]:active:not(:disabled) {
+  transform: scale(0.97);
+  transition: transform 0.1s ease-out;
+}
+
+/* =====================================================
+   BEAUTY-SPECIFIC DECORATIVE ELEMENTS
+   ===================================================== */
+
+/* Gradient text utility */
+.text-gradient-beauty {
+  background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass card effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(251, 207, 232, 0.4);
+}
+.dark .glass-card {
+  background: rgba(38, 16, 32, 0.8);
+  border: 1px solid rgba(61, 26, 48, 0.6);
+}
+
+/* Decorative dot pattern for section backgrounds */
+.beauty-dots {
+  background-image: radial-gradient(circle, var(--color-border) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Sidebar background gradient */
+[data-theme="beautybook"] aside {
+  background: var(--demo-sidebar-bg) !important;
+}
+
+/* =====================================================
+   BASE LAYER
+   ===================================================== */
+
+@layer base {
+  * {
+    @apply border-border;
+    outline: none;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+
+  /* Focus rings — only on interactive elements, not cards/containers */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Remove outline from Recharts and card containers */
+  svg:focus-visible,
+  [data-slot="card"]:focus-visible,
+  .recharts-wrapper:focus-visible,
+  .recharts-surface:focus-visible {
+    outline: none;
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Note: All color variables are defined in @theme inline above
+   and overridden per-theme via [data-theme="beautybook"] */
