@@ -1,123 +1,78 @@
-# BeautyBook ✨
+# BeautyBook
 
-A beauty salon management demo built during a vibe coding workshop. 100% client-side — no backend, no login, no API keys. Everything lives in your browser's `localStorage`.
+A fully client-side beauty salon management app that runs entirely in your browser, with no backend, login, or API keys required.
 
-> **Workshop students:** this is your playground. Clone it, run it, then point Claude Code at it and tell it what to change.
+BeautyBook gives salon owners a single dashboard to manage appointments, clients, services, staff, inventory, expenses, and finances. It was built as a hands-on demo for a vibe coding workshop, so it is designed to be cloned, run, and freely modified.
 
-## What's inside
+## Features
 
-- Dashboard with KPIs and charts
-- Appointments (list, add, filter, export to Excel)
-- Clients + client detail pages with visit history & treatment notes
-- Services, staff, inventory, expenses, packages, promotions
-- Financial report (with PDF export)
-- Booking flow (customer-facing tab)
-- 3 languages: English, Bahasa Melayu, 中文
-- Dark mode
-- Seed data resets with the "Reset" button in the top bar
+- Dashboard with animated KPI cards and charts for an at-a-glance overview
+- Appointments management: list, add, filter, and export to Excel
+- Client directory with detail pages, visit history, and treatment notes
+- Services, staff, inventory, expenses, packages, and promotions modules
+- Financial report with PDF export
+- Customer-facing booking flow with a confetti celebration on success
+- Staff performance tracking
+- Three languages out of the box: English, Bahasa Melayu, and Chinese
+- Dark mode toggle
+- Seed data with a one-click "Reset" button in the top bar
+- All data persisted locally in the browser via `localStorage`
 
-## Tech stack
+## Tech Stack
 
-| What | Why it's here |
-|---|---|
-| **React 19 + Vite** | Fast dev server, modern React |
-| **Tailwind CSS v4** + **shadcn/ui** | Styling and component primitives |
-| **Zustand** (with `persist`) | State management — writes to `localStorage` |
-| **recharts** | Charts on the dashboard and financial page |
-| **lucide-react** | Icons |
-| **xlsx** | Export tables to Excel |
-| **html2pdf.js** | Export financial report to PDF |
-| **react-router-dom** | Routing |
-| **canvas-confetti** | Celebration on booking 🎉 |
+- React 19 with Vite as the build tool and dev server
+- JavaScript (ES Modules)
+- Tailwind CSS v4 with shadcn/ui component primitives and Base UI
+- Zustand (with the `persist` middleware) for state management, backed by `localStorage`
+- React Router for client-side routing
+- Recharts for dashboard and financial charts
+- lucide-react for icons
+- xlsx for Excel export and html2pdf.js for PDF export
+- canvas-confetti for the booking celebration
+- Custom typography via CSS variables ("DM Sans" for body, "Plus Jakarta Sans" for headings)
 
-## Setup (one time)
+## Getting Started
 
-You need **Node.js 18+** and **npm** installed.
+### Prerequisites
+
+- Node.js 18+ and npm
+
+### Installation
 
 ```bash
-git clone <your-fork-or-this-repo-url>
-cd demo3-beautybook
 npm install
 ```
 
-## Run it
+### Running Locally
 
 ```bash
 npm run dev
 ```
 
-Open http://localhost:5173 — that's it. Data persists in your browser, so if you break something weird, click **Reset** in the top bar (or clear `localStorage` in DevTools).
+Then open http://localhost:5173 in your browser.
 
-### Other commands
+Other available commands:
 
 ```bash
-npm run build     # production build -> dist/
-npm run preview   # serve the built version
-npm run lint      # ESLint check
+npm run build     # production build to dist/
+npm run preview   # serve the production build
+npm run lint      # run ESLint
 ```
 
-## Project layout
+## Project Structure
 
-```
-src/
-├── App.jsx                 # Root — renders BeautyBookLayout
-├── main.jsx                # Providers (Router, Tooltip, Toast, Language)
-├── defaults.js             # Seed data — clients, services, appointments, etc.
-├── index.css               # Global styles + Tailwind + theme tokens
-├── pages/                  # One file per screen (Dashboard, Clients, …)
-│   └── index.jsx           # BeautyBookLayout — sidebar + view switcher
-├── components/
-│   ├── ui/                 # shadcn primitives (button, dialog, card, …)
-│   ├── TopBar.jsx          # Header with notifications & language switcher
-│   ├── KpiCard.jsx         # Animated KPI card with count-up
-│   ├── ChartCard.jsx       # Chart wrapper
-│   └── ...
-├── store/
-│   ├── index.js            # Zustand store (persisted to localStorage)
-│   └── slices/             # One slice per domain (appointments, clients, …)
-├── i18n/
-│   ├── index.jsx           # LanguageProvider + useT() hook
-│   └── locales/            # en.json, bm.json, cn.json
-└── lib/
-    ├── excel.js            # XLSX export helper
-    ├── pdf.js              # PDF export helper
-    ├── utils.js            # cn() helper
-    └── hooks/              # use-dark-mode, use-count-up, use-chart-theme
-```
+- `src/App.jsx` — root component that renders the main layout
+- `src/main.jsx` — app providers (Router, language, and UI providers)
+- `src/defaults.js` — seed data for clients, services, appointments, and more
+- `src/index.css` — global styles, Tailwind setup, and theme tokens
+- `src/pages/` — one file per screen (Dashboard, Appointments, Clients, Booking, etc.), plus the sidebar layout
+- `src/components/` — shared components, including `ui/` for shadcn primitives
+- `src/store/` — Zustand store (`index.js`) with one slice per domain under `slices/`
+- `src/i18n/` — language provider and `locales/` (en, bm, cn)
+- `src/lib/` — helpers for Excel export, PDF export, utilities, and custom hooks
 
-## Where to start modifying (prompts for Claude Code)
+## Notes
 
-Open this folder in your editor, run Claude Code, and try prompts like:
-
-### Small wins (5–10 min)
-
-- *"Add a new service called 'Hair Treatment' to [src/defaults.js](src/defaults.js), 90 min, RM 250. Make sure it shows up everywhere."*
-- *"Change the brand gradient from pink→purple to teal→blue. Update [src/index.css](src/index.css) and [src/pages/index.jsx](src/pages/index.jsx)."*
-- *"Add a 4th language (e.g. Tamil) by adding [src/i18n/locales/ta.json](src/i18n/locales/) and wiring it in [src/i18n/index.jsx](src/i18n/index.jsx) and [src/components/LanguageSwitcher.jsx](src/components/LanguageSwitcher.jsx)."*
-
-### Medium (30–60 min)
-
-- *"Add a 'Gift Cards' page: new slice in [src/store/slices/](src/store/slices/), new page in [src/pages/](src/pages/), new nav item in [src/pages/index.jsx](src/pages/index.jsx)."*
-- *"The KPI card in [src/components/KpiCard.jsx](src/components/KpiCard.jsx) currently counts up on mount. Make it also count up when the value prop changes."*
-- *"Add a date-range filter to [src/pages/Financial.jsx](src/pages/Financial.jsx) and have the charts re-aggregate based on it."*
-
-### Bigger ideas
-
-- *"Replace the localStorage persistence with Supabase so data syncs across devices. The store lives in [src/store/index.js](src/store/index.js) — swap the `persist` middleware."*
-- *"Add authentication (sign up / login) and scope the Zustand store per user."*
-- *"Add SMS reminders for pending appointments (mock it with a fake API for now)."*
-
-## Tips for prompting Claude Code
-
-1. **Be specific about files.** "Update [src/pages/Appointments.jsx](src/pages/Appointments.jsx)" beats "update the appointments page."
-2. **Reference the seed data.** If you want a new field on clients, say so — Claude will thread it through [src/defaults.js](src/defaults.js), the slice, and every page that renders it.
-3. **Work in small commits.** After each change, reload the app, click around, then ask for the next thing.
-4. **When things break,** click **Reset** in the top bar to wipe `localStorage` and restore seed data.
-
-## Security note
-
-This app has **zero secrets**. No `.env`, no API keys, no backend. Everything runs in the browser. If you add a backend (Supabase, Firebase, a REST API), put keys in a `.env` file — `.gitignore` already excludes it.
-
-## License
-
-Do whatever you want with this. Built for learning.
+- This app has no backend, no `.env`, and no API keys — everything runs in the browser. If you break something, click **Reset** in the top bar to wipe `localStorage` and restore the seed data.
+- It was built as a demo for a vibe coding workshop. The internal package name is `demo3-beautybook`.
+- If you extend it with a backend (such as Supabase or Firebase), store any keys in a `.env` file; `.gitignore` already excludes it.
