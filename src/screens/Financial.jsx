@@ -232,7 +232,7 @@ export function Financial() {
                         <CartesianGrid strokeDasharray="3 3" stroke={theme.grid} />
                         <XAxis dataKey="month" tick={{ fill: theme.text, fontSize: 13 }} />
                         <YAxis tick={{ fill: theme.text, fontSize: 12 }} tickFormatter={v => `RM ${(v / 1000).toFixed(1)}k`} />
-                        <Tooltip contentStyle={{ background: theme.bg, border: `1px solid ${theme.grid}`, borderRadius: 12, fontSize: 14 }} formatter={v => v ? `RM ${v.toLocaleString()}` : '—'} />
+                        <Tooltip {...theme.tooltip} contentStyle={{ ...theme.tooltip.contentStyle, fontSize: 14 }} formatter={v => v ? `RM ${v.toLocaleString()}` : '—'} />
                         <Area type="monotone" dataKey="actual" stroke="#10B981" strokeWidth={2.5} fill="url(#actualGrad)" name="Actual" dot={{ fill: '#10B981', r: 5 }} connectNulls={false} />
                         <Area type="monotone" dataKey="forecast" stroke="#8B5CF6" strokeWidth={2.5} strokeDasharray="6 3" fill="url(#forecastGrad)" name="Forecast" dot={{ fill: '#8B5CF6', r: 5, strokeDasharray: '0' }} connectNulls={false} />
                         <Legend wrapperStyle={{ fontSize: 13 }} />
@@ -274,7 +274,7 @@ export function Financial() {
                 <CartesianGrid strokeDasharray="3 3" stroke={theme.grid} horizontal={false} />
                 <XAxis type="number" tick={{ fill: theme.muted, fontSize: 12 }} tickFormatter={v => `RM ${v}`} />
                 <YAxis type="category" dataKey="name" width={110} tick={{ fill: theme.text, fontSize: 11 }} />
-                <Tooltip contentStyle={{ background: theme.bg, border: `1px solid ${theme.grid}`, borderRadius: 12, fontSize: 13 }} formatter={v => `RM ${v}`} />
+                <Tooltip {...theme.tooltip} formatter={v => `RM ${v}`} />
                 <Bar dataKey="rev" radius={[0, 6, 6, 0]} animationDuration={800}>
                   {svcRevData.map((_, i) => <Cell key={i} fill={barColors[i % barColors.length]} />)}
                 </Bar>
@@ -285,10 +285,10 @@ export function Financial() {
           <ChartCard title={t('fin.expenseBreakdown')}>
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
-                <Pie data={expData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="value" animationDuration={800}>
+                <Pie data={expData} stroke={theme.surface} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="value" animationDuration={800}>
                   {expData.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
                 </Pie>
-                <Tooltip contentStyle={{ background: theme.bg, border: `1px solid ${theme.grid}`, borderRadius: 12, fontSize: 13 }} formatter={v => `RM ${v}`} />
+                <Tooltip {...theme.tooltip} formatter={v => `RM ${v}`} />
               </PieChart>
             </ResponsiveContainer>
             <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-1">
@@ -321,7 +321,7 @@ export function Financial() {
                 <CartesianGrid strokeDasharray="3 3" stroke={theme.grid} />
                 <XAxis dataKey="hour" tick={{ fill: theme.muted, fontSize: 11 }} />
                 <YAxis tick={{ fill: theme.muted, fontSize: 11 }} allowDecimals={false} />
-                <Tooltip contentStyle={{ background: theme.bg, border: `1px solid ${theme.grid}`, borderRadius: 12, fontSize: 13 }} />
+                <Tooltip {...theme.tooltip} />
                 <Bar dataKey="count" fill="#EC4899" radius={[4, 4, 0, 0]} animationDuration={800} />
               </BarChart>
             </ResponsiveContainer>

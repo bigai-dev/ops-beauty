@@ -1,68 +1,49 @@
-import { useState } from 'react'
+import { useRef } from 'react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { TopBar } from '@/components/TopBar'
 import { useBeautyBookStore } from '@/store'
 import { useT } from '@/i18n'
 import { LayoutDashboard, CalendarCheck, Users, Sparkles, UserCog, Package, Receipt, Gift, Tag, TrendingUp, Trophy } from 'lucide-react'
-import { Dashboard } from './Dashboard'
-import { Appointments } from './Appointments'
-import { Clients } from './Clients'
-import { ClientDetail } from './ClientDetail'
-import { Services } from './Services'
-import { Staff } from './Staff'
-import { Performance } from './Performance'
-import { Booking } from './Booking'
-import { Inventory } from './Inventory'
-import { Expenses } from './Expenses'
-import { Packages } from './Packages'
-import { Promotions } from './Promotions'
-import { Financial } from './Financial'
 
+// Each admin screen has its own address under app/ (e.g. app/clients/page.jsx)
 const ADMIN_VIEWS = [
-  { id: 'dashboard', labelKey: 'nav.dashboard', Icon: LayoutDashboard },
-  { id: 'appointments', labelKey: 'nav.appointments', Icon: CalendarCheck },
-  { id: 'clients', labelKey: 'nav.clients', Icon: Users },
-  { id: 'services', labelKey: 'nav.services', Icon: Sparkles },
-  { id: 'staff', labelKey: 'nav.staff', Icon: UserCog },
-  { id: 'inventory', labelKey: 'nav.inventory', Icon: Package },
-  { id: 'expenses', labelKey: 'nav.expenses', Icon: Receipt },
-  { id: 'packages', labelKey: 'nav.packages', Icon: Gift },
-  { id: 'promotions', labelKey: 'nav.promotions', Icon: Tag },
-  { id: 'financial', labelKey: 'nav.financial', Icon: TrendingUp },
-  { id: 'performance', labelKey: 'nav.performance', Icon: Trophy },
+  { id: 'dashboard', path: '/', labelKey: 'nav.dashboard', Icon: LayoutDashboard },
+  { id: 'appointments', path: '/appointments', labelKey: 'nav.appointments', Icon: CalendarCheck },
+  { id: 'clients', path: '/clients', labelKey: 'nav.clients', Icon: Users },
+  { id: 'services', path: '/services', labelKey: 'nav.services', Icon: Sparkles },
+  { id: 'staff', path: '/staff', labelKey: 'nav.staff', Icon: UserCog },
+  { id: 'inventory', path: '/inventory', labelKey: 'nav.inventory', Icon: Package },
+  { id: 'expenses', path: '/expenses', labelKey: 'nav.expenses', Icon: Receipt },
+  { id: 'packages', path: '/packages', labelKey: 'nav.packages', Icon: Gift },
+  { id: 'promotions', path: '/promotions', labelKey: 'nav.promotions', Icon: Tag },
+  { id: 'financial', path: '/financial', labelKey: 'nav.financial', Icon: TrendingUp },
+  { id: 'performance', path: '/performance', labelKey: 'nav.performance', Icon: Trophy },
 ]
 
-export function BeautyBookLayout() {
-  const [topTab, setTopTab] = useState('admin')
-  const [adminView, setAdminView] = useState('dashboard')
-  const [selectedClientId, setSelectedClientId] = useState(null)
+const BOOKING_PATH = '/booking'
+
+function isActivePath(pathname, path) {
+  return path === '/' ? pathname === '/' : pathname === path || pathname.startsWith(`${path}/`)
+}
+
+// Top bar, admin sidebar and the admin/booking switch shared by every screen
+export function BeautyBookLayout({ children }) {
+  const pathname = usePathname()
+  const router = useRouter()
   const { getNotifications, getPendingCount, resetAll } = useBeautyBookStore()
   const t = useT()
   const notifications = getNotifications()
   const pendingCount = getPendingCount()
+  const topTab = isActivePath(pathname, BOOKING_PATH) ? 'booking' : 'admin'
+  // Remember which admin screen was open so "Admin" returns to it
+  const lastAdminPath = useRef('/')
 
-  const navigateToClient = (clientId) => {
-    setSelectedClientId(clientId)
-    setAdminView('clientDetail')
-  }
-
-  const renderView = () => {
-    switch (adminView) {
-      case 'dashboard': return <Dashboard />
-      case 'appointments': return <Appointments />
-      case 'clients': return <Clients onViewClient={navigateToClient} />
-      case 'clientDetail': return <ClientDetail clientId={selectedClientId} onBack={() => setAdminView('clients')} />
-      case 'services': return <Services />
-      case 'staff': return <Staff />
-      case 'performance': return <Performance />
-      case 'inventory': return <Inventory />
-      case 'expenses': return <Expenses />
-      case 'packages': return <Packages />
-      case 'promotions': return <Promotions />
-      case 'financial': return <Financial />
-      default: return <Dashboard />
-    }
+  const openBooking = () => {
+    if (topTab === 'admin') lastAdminPath.current = pathname
+    router.push(BOOKING_PATH)
   }
 
   return (
@@ -78,11 +59,11 @@ export function BeautyBookLayout() {
               <span className="text-gradient-beauty hidden sm:inline">BeautyBook</span>
             </h1>
             <div className="flex gap-1">
-              <Button variant={topTab === 'admin' ? 'default' : 'ghost'} size="sm" className="cursor-pointer text-xs sm:text-sm" onClick={() => setTopTab('admin')}>
+              <Button variant={topTab === 'admin' ? 'default' : 'ghost'} size="sm" className="cursor-pointer text-xs sm:text-sm" onClick={() => router.push(lastAdminPath.current)}>
                 <LayoutDashboard size={14} className="sm:mr-1" />
                 <span className="hidden sm:inline">{t('nav.admin')}</span>
               </Button>
-              <Button variant={topTab === 'booking' ? 'default' : 'ghost'} size="sm" className="cursor-pointer text-xs sm:text-sm" onClick={() => setTopTab('booking')}>
+              <Button variant={topTab === 'booking' ? 'default' : 'ghost'} size="sm" className="cursor-pointer text-xs sm:text-sm" onClick={openBooking}>
                 <CalendarCheck size={14} className="sm:mr-1" />
                 <span className="hidden sm:inline">{t('nav.booking')}</span>
                 {pendingCount > 0 && <Badge className="ml-1 h-4 min-w-4 px-1 text-[10px] bg-white text-primary font-bold">{pendingCount}</Badge>}
@@ -98,11 +79,12 @@ export function BeautyBookLayout() {
           <>
             <aside className="w-[200px] shrink-0 border-r border-border/60 p-3 overflow-y-auto hidden md:flex md:flex-col gap-0.5">
               {ADMIN_VIEWS.map(view => {
-                const isActive = adminView === view.id
+                const isActive = isActivePath(pathname, view.path)
                 return (
-                  <button
+                  <Link
                     key={view.id}
-                    onClick={() => setAdminView(view.id)}
+                    href={view.path}
+                    aria-current={isActive ? 'page' : undefined}
                     className={`flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-[13px] transition-all duration-200 cursor-pointer ${
                       isActive
                         ? 'bg-primary/10 text-primary font-semibold shadow-sm'
@@ -114,26 +96,26 @@ export function BeautyBookLayout() {
                     {view.id === 'appointments' && pendingCount > 0 && (
                       <Badge variant="destructive" className="ml-auto h-4 min-w-4 px-1 text-[10px]">{pendingCount}</Badge>
                     )}
-                  </button>
+                  </Link>
                 )
               })}
             </aside>
             <main className="flex-1 overflow-y-auto p-6" style={{ background: 'var(--color-background)' }}>
               <div className="md:hidden flex gap-1 mb-4 overflow-x-auto pb-2">
                 {ADMIN_VIEWS.map(view => (
-                  <Button key={view.id} variant={adminView === view.id ? 'default' : 'outline'} size="sm" className="shrink-0 text-xs cursor-pointer" onClick={() => setAdminView(view.id)}>
+                  <Button key={view.id} variant={isActivePath(pathname, view.path) ? 'default' : 'outline'} size="sm" className="shrink-0 text-xs cursor-pointer" onClick={() => router.push(view.path)}>
                     <view.Icon size={13} className="mr-1" /> {t(view.labelKey)}
                   </Button>
                 ))}
               </div>
-              {renderView()}
+              {children}
             </main>
           </>
         )}
 
         {topTab === 'booking' && (
           <main className="flex-1 overflow-y-auto p-6" style={{ background: 'var(--color-background)' }}>
-            <Booking />
+            {children}
           </main>
         )}
       </div>

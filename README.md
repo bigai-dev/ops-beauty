@@ -20,11 +20,11 @@ BeautyBook gives salon owners a single dashboard to manage appointments, clients
 
 ## Tech Stack
 
-- React 19 with Vite as the build tool and dev server
+- Next.js 16 (App Router, Turbopack) with React 19
 - JavaScript (ES Modules)
-- Tailwind CSS v4 with shadcn/ui component primitives and Base UI
+- Tailwind CSS v4 (via `@tailwindcss/postcss`) with shadcn/ui component primitives and Base UI
 - Zustand (with the `persist` middleware) for state management, backed by `localStorage`
-- React Router for client-side routing
+- Next.js file-based routing — every screen has its own address
 - Recharts for dashboard and financial charts
 - lucide-react for icons
 - xlsx for Excel export and html2pdf.js for PDF export
@@ -49,23 +49,26 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173 in your browser.
+Then open http://localhost:3000 in your browser.
 
 Other available commands:
 
 ```bash
-npm run build     # production build to dist/
-npm run preview   # serve the production build
+npm run build     # production build to .next/
+npm start         # serve the production build
 npm run lint      # run ESLint
 ```
 
 ## Project Structure
 
-- `src/App.jsx` — root component that renders the main layout
-- `src/main.jsx` — app providers (Router, language, and UI providers)
+- `app/` — Next.js routes: `layout.jsx` (page shell + metadata) and one `page.jsx` per screen: `/` (dashboard), `/appointments`, `/clients`, `/clients/[id]` (client detail), `/services`, `/staff`, `/inventory`, `/expenses`, `/packages`, `/promotions`, `/financial`, `/performance`, `/booking`; unknown addresses go back to `/`
+- `next.config.mjs` — Next.js config
+- `postcss.config.mjs` — Tailwind CSS v4 PostCSS plugin
+- `jsconfig.json` — the `@/` path alias (points to `src/`)
+- `src/components/AppShell.jsx` — app providers (language, tooltips, toasts) + main layout; renders in the browser only, since all data lives in `localStorage`
 - `src/defaults.js` — seed data for clients, services, appointments, and more
 - `src/index.css` — global styles, Tailwind setup, and theme tokens
-- `src/pages/` — one file per screen (Dashboard, Appointments, Clients, Booking, etc.), plus the sidebar layout
+- `src/screens/` — one file per screen (Dashboard, Appointments, Clients, Booking, etc.), plus `index.jsx` with the top bar, admin sidebar and admin/booking switch
 - `src/components/` — shared components, including `ui/` for shadcn primitives
 - `src/store/` — Zustand store (`index.js`) with one slice per domain under `slices/`
 - `src/i18n/` — language provider and `locales/` (en, bm, cn)

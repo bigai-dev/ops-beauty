@@ -17,6 +17,9 @@ export function Dashboard() {
   const { isDark } = useDarkMode()
   const theme = useChartTheme('beautybook', isDark)
   const todayRevenue = getTodayRevenue()
+  // Same "today" rule as getTodayRevenue, so the two cards agree
+  const today = new Date().toISOString().slice(0, 10)
+  const todayApptCount = appointments.filter(a => a.date === today && a.status !== 'cancelled' && a.status !== 'no-show').length
 
   const svcRevMap = {}
   services.forEach(s => { svcRevMap[s.id] = { name: s.emoji + ' ' + t(s.nameKey), rev: 0 } })
@@ -63,7 +66,7 @@ export function Dashboard() {
           />
         </div>
         <div className="stagger-item">
-          <KpiCard title={t('dash.todayAppts')} value={appointments.length} suffix={` ${t('dash.appts')}`} color="purple" trend={8}
+          <KpiCard title={t('dash.todayAppts')} value={todayApptCount} suffix={` ${t('dash.appts')}`} color="purple" trend={8}
             icon={<CalendarCheck size={20} />}
           />
         </div>
@@ -86,7 +89,7 @@ export function Dashboard() {
               <CartesianGrid strokeDasharray="3 3" stroke={theme.grid} horizontal={false} />
               <XAxis type="number" tick={{ fill: theme.muted, fontSize: 12 }} tickFormatter={v => `RM ${v}`} />
               <YAxis type="category" dataKey="name" width={100} tick={{ fill: theme.text, fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: theme.bg, border: `1px solid ${theme.grid}`, borderRadius: 12, fontSize: 13 }} formatter={v => `RM ${v}`} />
+              <Tooltip {...theme.tooltip} formatter={v => `RM ${v}`} />
               <Bar dataKey="rev" name={t('fin.revenue')} radius={[0, 8, 8, 0]} animationDuration={800}>
                 {svcRevData.map((_, i) => <Cell key={i} fill={barColors[i % barColors.length]} />)}
               </Bar>
@@ -97,10 +100,10 @@ export function Dashboard() {
         <ChartCard title={t('dash.apptStatus')} className="lg:col-span-1 stagger-item">
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
-              <Pie data={statusData} cx="50%" cy="50%" innerRadius={45} outerRadius={70} paddingAngle={4} dataKey="value" animationDuration={800}>
+              <Pie data={statusData} stroke={theme.surface} cx="50%" cy="50%" innerRadius={45} outerRadius={70} paddingAngle={4} dataKey="value" animationDuration={800}>
                 {statusData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
               </Pie>
-              <Tooltip contentStyle={{ background: theme.bg, border: `1px solid ${theme.grid}`, borderRadius: 12, fontSize: 13 }} />
+              <Tooltip {...theme.tooltip} />
             </PieChart>
           </ResponsiveContainer>
           <div className="flex flex-col items-center gap-1.5 -mt-1">

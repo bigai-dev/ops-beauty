@@ -13,6 +13,10 @@ const TIER_COLORS = { bronze: '#B45309', silver: '#6B7280', gold: '#D97706' }
 export function ClientDetail({ clientId, onBack }) {
   const { clients, services, appointments, therapists, treatmentNotes, clientPackages, packageTemplates, addTreatmentNote, getClientTreatments } = useBeautyBookStore()
   const t = useT()
+  // Hooks must run before the "client not found" early return, or React crashes
+  // when switching between a missing and an existing client
+  const [showAddNote, setShowAddNote] = useState(false)
+  const [noteForm, setNoteForm] = useState({ notes: '', concerns: '', productsUsed: '', recommendations: '' })
 
   const client = clients.find(c => c.id === clientId)
   if (!client) return <div className="page-enter"><Button variant="ghost" onClick={onBack}>← {t('common.close')}</Button><p>{t('common.noData')}</p></div>
@@ -22,9 +26,6 @@ export function ClientDetail({ clientId, onBack }) {
   const pkgs = clientPackages.filter(p => p.clientId === clientId)
   const favSvc = services.find(s => s.id === client.favSvcId)
   const tier = MEMBERSHIP_TIERS.slice().reverse().find(ti => client.totalSpent >= ti.minSpent) || MEMBERSHIP_TIERS[0]
-
-  const [showAddNote, setShowAddNote] = useState(false)
-  const [noteForm, setNoteForm] = useState({ notes: '', concerns: '', productsUsed: '', recommendations: '' })
 
   const handleAddNote = () => {
     if (!noteForm.notes) return
