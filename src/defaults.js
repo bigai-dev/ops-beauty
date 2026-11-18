@@ -15,11 +15,44 @@ const SHIFT_DAYS = Math.round((toUTC(isoToday()) - toUTC(SEED_TODAY)) / DAY_MS)
 // Same distance from today as in the seed (appointments, notes, visits, packages)
 export const seedDate = (iso) => new Date(toUTC(iso) + SHIFT_DAYS * DAY_MS).toISOString().slice(0, 10)
 
-// Monthly bills keep their day of the month in the current month, never later than today
-const thisMonthOn = (iso) => {
-  const today = isoToday()
-  const date = `${today.slice(0, 7)}-${iso.slice(8, 10)}`
-  return date > today ? today : date
+// A date a whole number of days before today
+const daysAgo = (n) => new Date(toUTC(isoToday()) - n * DAY_MS).toISOString().slice(0, 10)
+
+// Earlier history (6–34 days ago): a steady flow of 4–6 completed visits a day,
+// regulars plus walk-ins, so "this month" looks like a busy salon on any day.
+const HISTORY_CLIENTS = [
+  { client: 'Nurul Ain', clientId: 1, phone: '0112345678' },
+  { client: 'Priya K.', clientId: 2, phone: '0198765432' },
+  { client: 'Sarah Lim', clientId: 3, phone: '0167890123' },
+  { client: 'Hafizah', clientId: 4, phone: '0134567890' },
+  { client: 'Lina Tan', clientId: 5, phone: '0123456789' },
+  { client: 'Michelle W.', clientId: 6, phone: '0189012345' },
+  { client: 'Amy Chan', clientId: 7, phone: '0156789012' },
+  // Walk-ins (no saved client profile)
+  { client: 'Aisyah R.', phone: '0171234567' },
+  { client: 'Jasmine Ong', phone: '0162345678' },
+  { client: 'Kavitha S.', phone: '0193456789' },
+  { client: 'Farah Z.', phone: '0114567890' },
+  { client: 'Grace Tan', phone: '0125678901' },
+  { client: 'Rachel Lee', phone: '0176789012' },
+]
+const HISTORY_TIMES = ['09:30', '10:30', '11:30', '14:00', '15:00', '16:30']
+const THERAPIST_FOR_SERVICE = { 1: 1, 2: 2, 3: 3, 4: 1, 5: 2, 6: 3 }
+const HISTORY_APPOINTMENTS = []
+for (let ago = 34, id = 100; ago >= 6; ago--) {
+  const visits = 4 + ((ago * 7) % 3)
+  for (let i = 0; i < visits; i++) {
+    const svcId = ((ago + i * 2) % 6) + 1
+    HISTORY_APPOINTMENTS.push({
+      id: id++,
+      ...HISTORY_CLIENTS[(ago * 3 + i * 5) % HISTORY_CLIENTS.length],
+      svcId,
+      tid: THERAPIST_FOR_SERVICE[svcId],
+      time: HISTORY_TIMES[i],
+      date: daysAgo(ago),
+      status: 'completed',
+    })
+  }
 }
 
 // Calendar-year promotions run for the current year
@@ -41,6 +74,7 @@ export const DEFAULT_THERAPISTS = [
 ]
 
 export const DEFAULT_APPOINTMENTS = [
+  ...HISTORY_APPOINTMENTS,
   // The 5 days before today — completed appointments (historical revenue)
   { id: 1, client: 'Nurul Ain', clientId: 1, phone: '0112345678', svcId: 1, tid: 1, time: '10:00', date: seedDate('2026-04-01'), status: 'completed' },
   { id: 2, client: 'Sarah Lim', clientId: 3, phone: '0167890123', svcId: 2, tid: 2, time: '11:00', date: seedDate('2026-04-01'), status: 'completed' },
@@ -92,13 +126,24 @@ export const DEFAULT_INVENTORY = [
   { id: 8, nameKey: 'inv.browPencil', category: 'tools', qty: 20, costPrice: 12, sellPrice: 45, lowStock: 5, supplier: 'Cosmetic Hub', sku: 'SKU-008' },
 ]
 
+// One month of bills (~RM 13.8k), dated back from today and spread out like a real
+// salon pays them (salary twice a month, weekly restock and cleaning), so the
+// month-to-date profit stays healthy whatever day of the month it is.
 export const DEFAULT_EXPENSES = [
-  { id: 1, date: thisMonthOn('2026-04-01'), category: 'rent', descKey: 'exp.monthlyRent', amount: 1800, method: 'bank' },
-  { id: 2, date: thisMonthOn('2026-04-01'), category: 'utilities', descKey: 'exp.electric', amount: 220, method: 'bank' },
-  { id: 3, date: thisMonthOn('2026-04-02'), category: 'products', descKey: 'exp.restock', amount: 480, method: 'bank' },
-  { id: 4, date: thisMonthOn('2026-04-03'), category: 'salary', descKey: 'exp.staffSalary', amount: 1200, method: 'bank' },
-  { id: 5, date: thisMonthOn('2026-04-04'), category: 'marketing', descKey: 'exp.igAds', amount: 150, method: 'ewallet' },
-  { id: 6, date: thisMonthOn('2026-04-05'), category: 'misc', descKey: 'exp.cleaning', amount: 80, method: 'cash' },
+  { id: 1, date: daysAgo(20), category: 'rent', descKey: 'exp.monthlyRent', amount: 3200, method: 'bank' },
+  { id: 2, date: daysAgo(13), category: 'salary', descKey: 'exp.staffSalary', amount: 3300, method: 'bank' },
+  { id: 3, date: daysAgo(26), category: 'salary', descKey: 'exp.staffSalary', amount: 3300, method: 'bank' },
+  { id: 4, date: daysAgo(11), category: 'utilities', descKey: 'exp.electric', amount: 520, method: 'bank' },
+  { id: 5, date: daysAgo(2), category: 'products', descKey: 'exp.restock', amount: 650, method: 'bank' },
+  { id: 6, date: daysAgo(9), category: 'products', descKey: 'exp.restock', amount: 650, method: 'bank' },
+  { id: 7, date: daysAgo(16), category: 'products', descKey: 'exp.restock', amount: 600, method: 'bank' },
+  { id: 8, date: daysAgo(23), category: 'products', descKey: 'exp.restock', amount: 600, method: 'bank' },
+  { id: 9, date: daysAgo(5), category: 'marketing', descKey: 'exp.igAds', amount: 350, method: 'ewallet' },
+  { id: 10, date: daysAgo(19), category: 'marketing', descKey: 'exp.igAds', amount: 350, method: 'ewallet' },
+  { id: 11, date: daysAgo(1), category: 'misc', descKey: 'exp.cleaning', amount: 70, method: 'cash' },
+  { id: 12, date: daysAgo(8), category: 'misc', descKey: 'exp.cleaning', amount: 70, method: 'cash' },
+  { id: 13, date: daysAgo(15), category: 'misc', descKey: 'exp.cleaning', amount: 70, method: 'cash' },
+  { id: 14, date: daysAgo(22), category: 'misc', descKey: 'exp.cleaning', amount: 70, method: 'cash' },
 ]
 
 export const DEFAULT_PACKAGE_TEMPLATES = [

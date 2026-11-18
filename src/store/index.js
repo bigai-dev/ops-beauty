@@ -57,9 +57,9 @@ export const useBeautyBookStore = create(
     }),
     {
       name: 'beautybook_store_v2',
-      // v3: demo dates now follow the real date. Saved data from older versions
+      // v4: demo dates follow the real date, with a month of visits and bills. Saved data from older versions
       // (frozen in April 2026) is dropped once and replaced by the fresh seed.
-      version: 3,
+      version: 4,
       migrate: () => ({}),
     }
   )
